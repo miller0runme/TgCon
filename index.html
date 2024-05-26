@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Console</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            font-family: monospace;
+            padding: 20px;
+        }
+        .console {
+            border: 1px solid #333;
+            background-color: #2d2d2d;
+            padding: 20px;
+            overflow-y: auto;
+            height: 80vh;
+        }
+        .log-entry {
+            margin: 5px 0;
+            opacity: 0; /* Начальное значение прозрачности */
+            transition: opacity 0.5s ease; /* Анимация изменения прозрачности */
+        }
+        .log-entry.show {
+            opacity: 1; /* Прозрачность изменяется на 1 при добавлении класса show */
+        }
+        .log-entry.green {
+            color: #00ff00;
+        }
+        .log-entry.red {
+            color: #ff0000;
+        }
+        .log-entry.yellow {
+            color: #ffff00;
+        }
+        .log-entry.white {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Telegram Console</h1>
+    <div class="console" id="console"></div>
+    <script>
+        function addLogEntry(type, time, id, action) {
+            const consoleDiv = document.getElementById('console');
+            const entryDiv = document.createElement('div');
+            entryDiv.className = `log-entry ${type}`;
+            entryDiv.textContent = `[${time}] ${id}: ${action}`;
+            consoleDiv.appendChild(entryDiv);
+            setTimeout(() => {
+                entryDiv.classList.add('show');
+            }, 0); // Добавляем класс после добавления элемента в DOM
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        function getRandomId() {
+            const characters = '1234567890';
+            let idLength = Math.floor(Math.random() * 10) + 9; // Генерируем длину идентификатора от 9 до 18 символов
+            let id = '';
+            for (let i = 0; i < idLength; i++) {
+                id += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return id;
+        }
+
+        function getRandomAction() {
+            const actions = [
+                { type: 'green', action: 'зашел в канал' },
+                { type: 'red', action: 'вышел из группы' },
+                { type: 'yellow', action: 'изменил права' },
+                { type: 'white', action: 'написал сообщение' },
+                { type: 'yellow', action: 'создал канал' },
+                { type: 'green', action: 'вошел в чат' },
+                { type: 'red', action: 'вышел из чата' },
+                { type: 'white', action: 'ответил на сообщение' }
+            ];
+            return actions[Math.floor(Math.random() * actions.length)];
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString();
+        }
+
+        function updateConsole() {
+            const id = getRandomId();
+            const action = getRandomAction();
+            const time = getCurrentTime();
+            addLogEntry(action.type, time, id, action.action);
+        }
+
+        setInterval(updateConsole, 40); // Обновление каждые 0.0001 секунды
+    </script>
+</body>
+</html>
